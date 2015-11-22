@@ -1,0 +1,55 @@
+package servlet;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import sql.MySQLDriver;
+
+/**
+ * Servlet implementation class addOrganization
+ */
+
+@WebServlet("/addOrganization")
+public class addOrganization extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		System.out.println("Post Method being handled.");
+		String orgNameString = request.getParameter("orgName");
+		String orgCreator = request.getParameter("nameCreatorID");
+		System.out.println(orgNameString + " " + orgCreator);
+		//int orgCreatorID = Integer.parseInt(orgCreator);
+		MySQLDriver msql = new MySQLDriver();
+		msql.connect();
+		System.out.println("connected");
+		//msql.addOrganization(orgCreatorID, orgNameString);
+		msql.stop();
+	}
+	public JSONObject translateToJSON(HttpServletRequest request) {
+		  JSONObject newObject = new JSONObject();
+		  Map<String,String[]> parameterMap = request.getParameterMap();
+		  Iterator<Map.Entry<String,String[]>> mapIt = parameterMap.entrySet().iterator();
+		  
+		  while(mapIt.hasNext()) {
+			  Map.Entry<String,String[]> curr = mapIt.next();
+			  String [] result = curr.getValue();
+			  if(result.length != 1) {
+				  Object addObject = result;
+				  newObject.put(curr.getKey(), addObject);
+			  } else {
+				  Object addObject = result[0];
+				  newObject.put(curr.getKey(), addObject);
+			  }
+		  }
+		  return newObject;
+	}
+
+}

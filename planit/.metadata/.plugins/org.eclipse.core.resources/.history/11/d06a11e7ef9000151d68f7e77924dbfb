@@ -1,0 +1,56 @@
+package servlet;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import sql.MySQLDriver;
+
+/**
+ * Servlet implementation class clickOrganization
+ */
+@WebServlet("/clickOrganization")
+public class clickOrganization extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+			List<String> meetingNames = new ArrayList<String>();
+			List<String> meetingDeadlines = new ArrayList<String>();
+			/*
+			try{
+				String query = "SELECT meetingName, deadline FROM Meeting WHERE idOrganization = ?"
+				PreparedStatement prepStmt; 
+				prepStmt = conn.prepareStatement(query);
+				prepStmt.setString(1, "Spark");
+				ResultSet resultSet = prepStmt.executeQuery();
+				System.out.println("meeting names:");
+		      */
+			String meetingIDString = request.getParameter("meetingID");
+			int meetingID = Integer.parseInt(meetingIDString);
+			
+			MySQLDriver msql = new MySQLDriver();
+			msql.connect();
+			System.out.println("connected");
+			ResultSet resultSet = msql.getMeetings(meetingID);
+		    while (resultSet.next()) {
+		        String name = resultSet.getString("meetingName");
+		        String deadl = resultSet.getString("deadline");
+		        System.out.println("   "+name+" "+deadl);
+		        meetingNames.add(name);
+		        meetingDeadlines.add(deadl);
+		      }
+	}	
+		
+
+}
