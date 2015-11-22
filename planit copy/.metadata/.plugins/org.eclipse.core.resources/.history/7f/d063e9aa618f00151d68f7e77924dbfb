@@ -1,0 +1,10 @@
+package sql;
+
+public class startDatabase {
+	public static void main (String [] args) {
+		MySQLDriver msql = new MySQLDriver();
+		msql.connect();
+		msql.add();
+		msql.stop();
+	}
+}

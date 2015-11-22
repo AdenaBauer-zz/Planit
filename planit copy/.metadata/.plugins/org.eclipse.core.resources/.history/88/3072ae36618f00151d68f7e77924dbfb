@@ -1,0 +1,48 @@
+package sql;
+
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.mysql.jdbc.Driver;
+
+
+public class MySQLDriver {
+	private Connection con;
+	//private final static String selectName = "SELECT * FROM FACTORYORDERS WHERE NAME=?";
+	private final static String addOrganization = "INSERT INTO Organization (idOrganization, UID, nameOrganization) VALUES ('0', '0', 'Spark')";
+	
+	public MySQLDriver() {
+		try {
+			new Driver();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public void connect() {
+		try {
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/PlanitSchema?user=root&password=");
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+	public static void createOrganization(String orgStringName, int orgCreatorID){
+		
+		//TODO: Add stuff do the data base
+		//TODO: make array for meetings as part of org data as well
+		
+	}
+	public void add() {
+		try{
+			PreparedStatement ps = con.prepareStatement(addOrganization);
+			ps.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+	}
+	public void stop() {
+		try {con.close();} catch (SQLException e) {e.printStackTrace();}
+	}
+
+}
+

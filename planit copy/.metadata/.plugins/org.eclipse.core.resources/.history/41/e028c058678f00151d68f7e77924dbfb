@@ -1,0 +1,11 @@
+package sql;
+
+public class startDatabase {
+	public static void main (String [] args) {
+		MySQLDriver msql = new MySQLDriver();
+		msql.connect();
+		System.out.println("connected");
+		msql.add(1, "Shparkd");
+		msql.stop();
+	}
+}

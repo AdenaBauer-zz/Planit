@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;mysql-connector-java-5.0.8-bin&apos;" deleteContents="false" description="Delete resource &apos;mysql-connector-java-5.0.8-bin&apos;" element1="/mysql-connector-java-5.0.8-bin" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1448006316913"/>
+</session>
