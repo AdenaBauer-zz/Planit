@@ -2,6 +2,9 @@ package servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -24,7 +27,6 @@ public class addOrganization extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-		System.out.println("Post Method being handled.....");
 		
 		response.setContentType("application/json");
 		JSONObject object = translateToJSON(request);
@@ -58,6 +60,21 @@ public class addOrganization extends HttpServlet {
 		msql.connect();
 		System.out.println("connected");
 		msql.addOrganization(orgCreatorID, orgNameString);
+		ResultSet rs = msql.getOrgId(orgCreatorID, orgNameString);
+		String idOrganization = "";
+		try {
+			while(rs.next()) {
+				idOrganization = rs.getString("idOrganization");
+				System.out.println(idOrganization);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out.println(idOrganization);
+		out.flush();
 		msql.stop();
 	}
 	public JSONObject translateToJSON(HttpServletRequest request) {

@@ -1,0 +1,69 @@
+package servlet;
+
+import java.io.IOException;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import sql.MySQLDriver;
+
+/**
+ * Servlet implementation class clickOrganization
+ */
+@WebServlet("/clickOrganization")
+public class clickOrganization extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+			List<String> meetingNames = new ArrayList<String>();
+			List<String> meetingDeadlines = new ArrayList<String>();
+
+			String meetingIDString = request.getParameter("meetingID");
+			int meetingID = Integer.parseInt(meetingIDString);
+			//int meetingID = 1;
+			MySQLDriver msql = new MySQLDriver();
+			msql.connect();
+			System.out.println("connected");
+			ResultSet resultSet = msql.getMeetings(meetingID);
+		    try {
+				while (resultSet.next()) {
+				    String name = resultSet.getString("meetingName");
+				    String deadl = resultSet.getString("deadline");
+				    
+				    String comparableDate = deadl.substring(0, 3) + deadl.substring(5, 6) + deadl.substring(8, 9);   	
+				    int meetingDateInt = Integer.parseInt(comparableDate);
+				    Calendar currentDate = Calendar.getInstance(); //Get the current date
+				    SimpleDateFormat formatter= new SimpleDateFormat("yyyyMMdd"); //format it as per your requirement
+				    String dateNow = formatter.format(currentDate.getTime());
+				    int dateNowInt = Integer.parseInt(dateNow);
+				    
+				    if(dateNowInt > meetingDateInt){
+				    	//delete THIS meetingID from database
+				    }
+		    
+				    System.out.println("   "+name+" "+deadl);
+				    meetingNames.add(name);
+				    meetingDeadlines.add(deadl);
+				  }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}	
+		
+
+}

@@ -33,7 +33,22 @@ public class startDatabase {
 			e.printStackTrace();
 		}
 		msql.opt(2, 4, 1);
-		msql.deleteMeeting(36);
+		ResultSet rs = msql.getOptInners(4);
+		try {
+			while (rs.next()) {
+			    int uid = 0;
+				try {
+					uid = rs.getInt("UID");
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    System.out.println(""+uid);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		msql.stop();
 		
 	}

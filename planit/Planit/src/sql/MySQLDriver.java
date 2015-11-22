@@ -19,8 +19,11 @@ public class MySQLDriver {
 	private final static String exists = "SELECT idMeetingOpt FROM MeetingOpt WHERE UID = ? AND meetingID = ?";
 	private final static String addMeetingOpt = "INSERT INTO MeetingOpt (UID, meetingID, opt) VALUES (?, ?, ?)";
 	private final static String updateMeetingOpt = "UPDATE MeetingOpt SET opt = ? WHERE UID = ? AND meetingID = ?";
-	private final static String getMeetings = "SELECT meetingName, deadline FROM Meeting WHERE idOrganization = ?"; 
+	private final static String getMeetings = "SELECT meetingName, deadline, idMeeting FROM Meeting WHERE idOrganization = ?"; 
 	private final static String deleteMeeting = "DELETE FROM Meeting WHERE idMeeting = ?"; 
+	private final static String getOptInners = "SELECT UID FROM MeetingOpt WHERE meetingID = ? AND opt = ?";
+	private final static String getOrgID = "SELECT idOrganization FROM Organization WHERE UID = ? AND nameOrganization = ?";
+	private final static String getAllOrgs = "SELECT idOrganization, nameOrganization FROM Organization";
 	
 	
 	public MySQLDriver() {
@@ -125,6 +128,7 @@ public class MySQLDriver {
 		return resultSet;
 	}
 	
+	
 	public static void deleteMeeting(int idMeeting) {
 		try{
 			PreparedStatement ps = con.prepareStatement(deleteMeeting);
@@ -132,6 +136,38 @@ public class MySQLDriver {
 			ps.executeUpdate();
 		} catch (SQLException e) {e.printStackTrace();}
 	}
+	
+	public static ResultSet getOptInners(int idMeeting) {
+		ResultSet rs = null;
+		try{
+			PreparedStatement ps = con.prepareStatement(getOptInners);
+			ps.setInt(1, idMeeting);
+			ps.setInt(2, 1);
+			rs = ps.executeQuery();
+		} catch (SQLException e) {e.printStackTrace();}
+		return rs;
+	}
+	
+	public static ResultSet getOrgId(int UID, String nameOrganization) {
+		ResultSet rs = null;
+		try{
+			PreparedStatement ps = con.prepareStatement(getOrgID);
+			ps.setInt(1, UID);
+			ps.setString(2, nameOrganization);
+			rs = ps.executeQuery();
+		} catch (SQLException e) {e.printStackTrace();}
+		return rs;
+	}
+	
+	public static ResultSet getOrganizations() {
+		ResultSet rs = null;
+		try{
+			PreparedStatement ps = con.prepareStatement(getAllOrgs);
+			rs = ps.executeQuery();
+		} catch (SQLException e) {e.printStackTrace();}
+		return rs;
+	}
+	
 	
 	
 }

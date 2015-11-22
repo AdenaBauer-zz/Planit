@@ -7,6 +7,7 @@
         <title>Planit | Dashboard</title>
         <link rel="stylesheet" href="style.css">
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
+        <script src="jquery-2.1.4.min.js"></script>
         <script type="text/javascript">
           // Your Client ID can be retrieved from your project in the Google
           // Developer Console, https://console.developers.google.com
@@ -25,7 +26,7 @@
                 'immediate': true
               }, handleAuthResult);
           }
-
+		
           /**
            * Handle response from authorization server.
            *
@@ -102,7 +103,6 @@
                      var event = events[i];
                      var dateObj = new Date(event.start.dateTime);
                      var day = dateObj.getDay();
-                     console.log(event)
                      var starttime;
                      var endtime;
                      if(event.start.dateTime !== undefined){
@@ -133,7 +133,7 @@
                            scheduleString += schedule[j][k];
                        }
                    }
-                   console.log(scheduleString);
+                   /* console.log(scheduleString); */
                  } else {
                    // appendPre('No upcoming events found.');
                    alert('No upcoming events found.');
@@ -152,6 +152,7 @@
             });
 
             request.execute(function(resp) {
+           		
               var events = resp.items;
               appendPre('Upcoming events:');
 
@@ -190,25 +191,50 @@
             			"nameCreatorID": "17"
             	};
             	
-            	var posting = $.post( 'http://localhost:8080/Planit/addOrganization', JSON.stringify(orgdata));
+            	var posting = $.post( 'http://localhost:8080/Planit/addOrganization', JSON.stringify(orgdata), function(data, status){
+					console.log(data);
+			  		$('#sidebar').append("<div id='" + data.substr(0, data.length-1) + "' class='organization'>" + $('#org-name-input').val() + "</div>");
+				  	
+            	});
 				
-				posting.done( function( data ) {
+				/* posting.done( function( data ) {
 					
-					console.log("POST" + data);
+					console.log(data);
 					
 				  	if(data.length > 1) {
 				  		 $('#sidebar').append("<div id='4' class='organization'>" + $('#org-name-input').val() + "</div>");
 				  	}
 				  	
-				});
+				  	
+				  	
+				  	//var idpost = $.post('http://localhost:8080/Planit/clickOrganization', id);
+				}); */
+				
+				
             }
           }
-
-          function addOrganizationTemp() {
-              if($('#org-name-input').val().length > 0){
-                    $('#sidebar').append("<div id='4' class='organization'>" + $('#org-name-input').val() + "</div>");
-                  }
+			
+          function getOrganizations() {
+        	  $.get("http://localhost:8080/Planit/getOrganization", function(data){
+        		  var orgs = JSON.parse(data).organizations;
+        		  console.log(orgs);
+        		  for(org in orgs){
+        			  $("#organizations").append(
+           				  "<div id='" + orgs[org].idOrganization + "' class='organization'>" +
+                              orgs[org].nameOrganization + 
+                          "</div>"  
+            		  );
+        		  }
+        		  
+        		 
+        	  });
           }
+          
+          $(document).ready(function () {
+        	  getOrganizations();
+        	});
+          
+          
         </script>
         <script src="https://apis.google.com/js/client.js?onload=checkAuth">
         </script>
@@ -229,16 +255,7 @@
         </div>
         <div id="sidebar" class="hidden">
             <div id="organizations">
-                <div id="1" class="organization org-selected">
-                    Spark SC
-                </div>
-                <!-- Additional Orgs -->
-                <div id="2" class="organization">
-                    USC Hackers
-                </div>
-                <div id="3" class="organization">
-                    Spark Media
-                </div>
+                
             </div>
             <div id="new-org">
                 + Organization
@@ -414,7 +431,7 @@
             </div>
         </div>
 
-        <script src="jquery-2.1.4.min.js"></script>
+       
         <script src="main.js"></script>
 
     </body>

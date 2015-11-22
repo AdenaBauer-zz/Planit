@@ -1,0 +1,44 @@
+package sql;
+
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class startDatabase {
+	public static void main (String [] args) {
+		MySQLDriver msql = new MySQLDriver();
+		msql.connect();
+		System.out.println("connected");
+		msql.addOrganization(1, "Shparkd");
+		msql.addMeeting(1, new Date(1990), 1, "uschackers");
+		msql.addMeeting(1, new Date(1990), 1, "media");
+		msql.addUser("adenur");
+		ResultSet resultSet = msql.getMeetings(1);
+		List<String> meetingNames = new ArrayList<String>();
+		List<String> meetingDeadlines = new ArrayList<String>();
+		try {
+			while (resultSet.next()) {
+			    String name = resultSet.getString("meetingName");
+			    String deadl = resultSet.getString("deadline");
+			    System.out.println("   "+name+" "+deadl);
+			    meetingNames.add(name);
+			    meetingDeadlines.add(deadl);
+			  }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		msql.opt(2, 4, 1);
+		ResultSet rs = msql.getOptInners(4);
+		while (rs.next()) {
+		    String uid = rs.getInt("UID");
+		    System.out.println(uid);
+		}
+		msql.stop();
+		
+	}
+}
