@@ -1,0 +1,8 @@
+package sql;
+
+public class OrganizationDataManager {
+
+	public void createOrganization(String orgStringName, int orgCreatorID){
+		
+	}
+}

@@ -1,0 +1,22 @@
+package sql;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class OrganizationDataManager {
+
+	public static void createOrganization(String orgStringName, int orgCreatorID){
+		
+		//TODO: Add stuff do the data base
+		//TODO: make array for meetings as part of org data as well
+		
+	}
+	/*public void add(String productName) {
+		try{
+			//PreparedStatement ps = con.prepareStatement(addProduct);
+			ps.setString(1, productName);
+			ps.setInt(2, 0);
+			ps.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+	}*/
+}
